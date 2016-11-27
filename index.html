@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" ng-app="transactionApp">
+    <head>
+        <meta charset="utf-8">
+        <script src="angular.js"></script>
+        <script src="app.js"></script>
+    </head>
+    <body data-ng-controller="TransactionController">
+        <p data-ng-if="showMessages.successMessage" style="color:green;">Your transaction was successfully logged</p>
+        <p data-ng-if="showMessages.errorMessage" style="color:red;" data-ng-bind="errorMessage"></p>
+
+        <form novalidate ng-model-options="{debounce: 500}" name="TransactionForm">
+            <p data-ng-if="TransactionForm.email.$invalid && TransactionForm.email.$dirty" style="color: red;">
+                <span data-ng-if="TransactionForm.email.$error.required">Email is required</span>
+                <span data-ng-if="TransactionForm.email.$error.pattern">Email must be a valid email</span>
+                <span data-ng-if="TransactionForm.email.$error.maxLength">Email too long (max 255 characters)</span>
+            </p>
+            <p>
+                <label style="height: 20px;" >Email</label>
+                <input style="height: 20px;" name="email"
+                       ng-pattern="/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/"
+                       type="text"
+                       maxlength="255" data-ng-model="model.email" data-ng-required="true">
+            </p>
+            <p data-ng-if="TransactionForm.amount.$invalid && TransactionForm.amount.$dirty" style="color: red;">
+                <span data-ng-if="TransactionForm.amount.$error.required">Amount is required</span>
+                <span data-ng-if="TransactionForm.amount.$error.max">Amount must be less than 10000</span>
+                <span data-ng-if="TransactionForm.amount.$error.min">Amount must be more than 0.01</span>
+            </p>
+            <p>
+                <label style="height: 20px;">Amount</label> <input style="height: 20px;" name="amount" min="0.01" max="10000" type="number" data-ng-model="model.amount" data-ng-required="true">
+            </p>
+
+            <p><button style="height: 40px; font-size: 16px;" data-ng-disabled="TransactionForm.$invalid" data-ng-click="logTransaction(TransactionForm)">Log Transaction</button></p>
+        </form>
+</body>
+</html>
